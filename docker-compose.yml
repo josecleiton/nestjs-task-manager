@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  postgres:
+    container_name: njstm-postgres
+    image: postgres:alpine
+    expose:
+      - "${DB_PORT}"
+    volumes:
+      - "njstm-volume:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - njstm-network
+    restart: unless-stopped
+
+  pg-admin:
+    container_name: njstm-pg-admin
+    image: dpage/pgadmin4:4.10
+    ports:
+      - "${PGADMIN_LISTEN_PORT}:${PGADMIN_REVERSE_EXPOSE_PORT}"
+    volumes:
+      - "njstm-volume:/var/lib/pgadmin"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_LISTEN_PORT: ${PGADMIN_LISTEN_PORT}
+    depends_on:
+      - postgres
+    networks:
+      - njstm-network
+    restart: unless-stopped
+
+  njstm:
+    container_name: njstm-api
+    build:
+      context: .
+      dockerfile: Dockerfile-local
+    ports:
+      - "${PORT_EXPOSED}:${PORT}"
+    volumes:
+      - "./:/njstm-volume/app"
+    depends_on:
+      - postgres
+    networks:
+      - njstm-network
+    restart: unless-stopped
+
+networks:
+  njstm-network:
+    driver: bridge
+
+volumes:
+  njstm-volume:
+    driver: "local"
