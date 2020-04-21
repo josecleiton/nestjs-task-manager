@@ -14,18 +14,22 @@ export class UserRepository extends Repository<User> {
     user.password = await bcrypt.hashSync(password);
     user.name = name;
     try {
-    await user.save();
-    } catch(err) {
-       if(err.code === "23505") { // duplicate username
-          throw new ConflictException('username already exists');
-       }
-       throw err;
+      await user.save();
+    } catch (err) {
+      if (err.code === '23505') {
+        // duplicate username
+        throw new ConflictException('username already exists');
+      }
+      throw err;
     }
   }
 
-  async validateUserPassword(signInDto: SignInDto): Promise<boolean> {
-     const {username, password} = signInDto;
-     const user = await this.findOne({ username });
-     return user && user.validatePassword(password);
+  async validateUserPassword(signInDto: SignInDto): Promise<User | null> {
+    const { username, password } = signInDto;
+    const user = await this.findOne({ username });
+    if (!(user && user.validatePassword(password))) {
+      return null;
+    }
+    return user;
   }
 }

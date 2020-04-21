@@ -1,5 +1,11 @@
-import { Entity, BaseEntity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import * as bcrypt from 'bcryptjs'
+import {
+  Entity,
+  BaseEntity,
+  Column,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 
 @Entity()
 @Unique(['username'])
@@ -14,6 +20,6 @@ export class User extends BaseEntity {
   password: string;
 
   async validatePassword(password: string): Promise<boolean> {
-     return bcrypt.compare(password,this.password);
+    return bcrypt.compare(password, this.password);
   }
 }

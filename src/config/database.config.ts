@@ -1,6 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-
-import 'dotenv/config';
+import { registerAs } from '@nestjs/config';
 
 const { DB_DATABASE, DB_HOST, DB_USER, DB_PASSWORD, DB_PORT } = process.env;
 
