@@ -1,7 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { registerAs } from '@nestjs/config';
 
-const { DB_DATABASE, DB_HOST, DB_USER, DB_PASSWORD, DB_PORT } = process.env;
+const { NODE_ENV, DB_DATABASE, DB_HOST, DB_USER, DB_PASSWORD, DB_PORT } = process.env;
 
 export const dbConfig: TypeOrmModuleOptions = {
   host: DB_HOST,
@@ -12,4 +11,5 @@ export const dbConfig: TypeOrmModuleOptions = {
   port: parseInt(DB_PORT),
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
   synchronize: true,
+  logging: NODE_ENV === 'development'
 };
