@@ -11,6 +11,6 @@ export const dbConfig: TypeOrmModuleOptions = {
   database: DB_DATABASE,
   type: 'postgres',
   port: parseInt(DB_PORT),
-  entities: [__dirname + '/../**/*entity.{js,ts}'],
+  entities: [__dirname + '/../**/*.entity.{js,ts}'],
   synchronize: true,
 };
