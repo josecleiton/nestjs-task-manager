@@ -1,4 +1,3 @@
-import { registerAs } from '@nestjs/config';
 import { JwtModuleOptions } from '@nestjs/jwt';
 import { jwtSecretKey, expiresIn } from '../auth/auth.constants';
 

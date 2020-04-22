@@ -9,7 +9,7 @@ import { SignInDto } from './dto/signin.dto';
 export class UserRepository extends Repository<User> {
   async signUp(signUpDto: SignUpDto): Promise<void> {
     const { username, password, name } = signUpDto;
-    const user = new User();
+    const user = this.create();
     user.username = username;
     user.password = await bcrypt.hashSync(password);
     user.name = name;
